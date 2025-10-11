@@ -1,0 +1,14 @@
+{
+  "name": "strip-ansi",
+  "version": "7.1.2",
+  "description": "Vendored CommonJS build of strip-ansi for Hexo",
+  "main": "index.js",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "require": "./index.js",
+      "default": "./index.js"
+    }
+  },
+  "license": "MIT"
+}
