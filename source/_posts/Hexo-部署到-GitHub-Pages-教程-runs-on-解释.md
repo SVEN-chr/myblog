@@ -122,46 +122,89 @@ hexo clean && hexo g && hexo d
 
 ### 2️⃣ 新建 GitHub Actions 文件
 
+**推荐方案：使用 GitHub Pages 官方部署（2025年最佳实践）**
+
 在你的仓库中新建路径：
 
 ```
-.github/workflows/deploy.yml
+.github/workflows/pages.yml
 ```
 
 内容如下：
 
 ```yaml
-name: Hexo Deploy
+name: Build and Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: [ master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '22'  # 推荐使用最新 LTS 版本
+          cache: 'npm'
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Install dependencies
+        run: |
+          npm ci
+          # 确保安装所有必需的渲染器
+          npm install hexo-renderer-pug hexo-renderer-stylus --save
 
-      - name: Build Hexo
-        run: npx hexo generate
+      - name: Build
+        run: |
+          npx hexo clean
+          npx hexo generate
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+        id: deployment
+        uses: actions/deploy-pages@v4
 ```
+
+### 3️⃣ 启用 GitHub Pages
+
+1. 进入仓库 Settings → Pages
+2. Source 选择 "GitHub Actions"
+3. 等待第一次构建完成
+
+**重要提醒：**
+- 使用 `npx hexo` 而不是 `hexo` 避免命令找不到的错误
+- Node.js 22 比 18 对现代依赖兼容性更好
+- 不再需要 `hexo-deployer-git` 插件
 
 ---
 
@@ -213,10 +256,28 @@ runs-on: ubuntu-latest
 | 问题         | 原因                         | 解决方法                                   |
 | ---------- | -------------------------- | -------------------------------------- |
 | 页面 404     | 仓库名或分支错误                   | 仓库必须是 `username.github.io` 且分支为 `main` |
-| 样式错乱       | `_config.yml` 的 `url` 配置错误 | 确保写成 `https://username.github.io/`     |
+| 样式错乱       | `_config.yml` 的 `url` 配置错误 | 确保写成 `https://username.github.io/repo-name` |
 | 无法推送       | SSH 未配置                    | 执行 `ssh -T git@github.com` 检查连接        |
 | 页面未更新      | GitHub 缓存未刷新               | 强制刷新（Ctrl+F5）或清除缓存                     |
-| Actions 失败 | Node 版本过低或包未装全             | 检查 `node-version` 和 `npm install` 步骤   |
+| `hexo: command not found` | GitHub Actions 中未使用 npx | 改为 `npx hexo` 而不是 `hexo`   |
+| ESM 模块错误 | Node.js 版本兼容性问题 | 使用 Node.js 22 而不是 18 |
+
+### 🔥 新增常见错误
+
+#### 错误 1：`hexo: command not found`
+**解决方案**：在工作流中使用 `npx hexo` 而不是 `hexo`
+
+#### 错误 2：`Error [ERR_REQUIRE_ESM]: require() of ES Module not supported`
+**解决方案**：将 Node.js 版本升级到 22
+
+#### 错误 3：Actions 权限错误
+**解决方案**：确保工作流包含正确的 permissions 配置
+```yaml
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+```
 
 ---
 

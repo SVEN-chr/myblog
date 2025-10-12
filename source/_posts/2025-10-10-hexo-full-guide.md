@@ -183,30 +183,84 @@ npm i hexo-wordcount --save             # 字数/阅读时长
 
 ## 进阶：GitHub Actions 自动构建发布
 
-在你的仓库中新增 `.github/workflows/deploy.yml`：
+**推荐方案：使用 GitHub Pages 部署（2025年最佳实践）**
+
+在你的仓库中新增 `.github/workflows/pages.yml`：
 
 ```yaml
-name: Deploy Hexo
+name: Build and Deploy to GitHub Pages
+
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          node-version: 18
-      - run: npm ci || npm i
-      - run: npx hexo generate
-      - uses: peaceiris/actions-gh-pages@v3
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          node-version: '22'  # 推荐使用最新 LTS
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          # 确保安装所有必需的渲染器
+          npm install hexo-renderer-pug hexo-renderer-stylus --save
+
+      - name: Build
+        run: |
+          npx hexo clean
+          npx hexo generate
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 ```
 
-以后只需 `git push`，自动发布。
+**重要配置：**
+1. **启用 GitHub Pages**：Settings → Pages → Source 选择 "GitHub Actions"
+2. **更新 `_config.yml`**：
+   ```yaml
+   url: https://username.github.io/repo-name
+   ```
+3. **移除 hexo-deployer-git**：不再需要传统的 git 部署
+
+以后只需 `git push`，自动发布到 `https://username.github.io/repo-name`。
+
+⚠️ **注意**：如果遇到 `hexo: command not found` 错误，确保使用 `npx hexo` 而不是 `hexo`。
 
 ---
 
