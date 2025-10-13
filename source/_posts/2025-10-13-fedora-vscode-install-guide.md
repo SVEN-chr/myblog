@@ -7,6 +7,7 @@ categories:
   - Linux
   - 开发工具
 toc: true
+pin: false
 ---
 
 > 详细介绍如何在 Fedora Linux 系统中安装和配置 Visual Studio Code，包括官方仓库配置、命令行安装以及常用扩展推荐。
