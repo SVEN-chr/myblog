@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: sven的博客
 subtitle: ''
 description: ''
 keywords:
-author: John Doe
+author: SVEN
 language: en
 timezone: ''
 
@@ -97,6 +97,11 @@ ignore:
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: volantis
+
+# Volantis theme configuration
+theme_config:
+  cover:
+    title: 'SVEN'
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
