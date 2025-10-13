@@ -147,15 +147,8 @@ create_commit() {
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     local formatted_msg="$COMMIT_MSG"
 
-    # 创建提交
-    git commit -m "$(cat << EOF
-$formatted_msg
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>
-EOF
-)"
+    # 创建提交 - 纯个人提交，不添加任何Claude标识
+    git commit -m "$formatted_msg"
 
     if [ $? -eq 0 ]; then
         print_success "提交创建成功"
