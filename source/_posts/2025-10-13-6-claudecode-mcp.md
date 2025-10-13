@@ -1,5 +1,5 @@
 ---
-title: 6 个 ClaudeCode 必装 MCP，开发效率直接起飞！（附安装命令）
+title: 7 个 ClaudeCode 必装 MCP，开发效率直接起飞！（附安装命令）
 date: 2025-10-13 14:20:00
 tags:
   - Claude Code
@@ -114,9 +114,26 @@ claude mcp add --transport http supabase "https://mcp.supabase.com/mcp"
 claude mcp add search -s user -e BRAVE_API_KEY={your-key} -- npx -y @modelcontextprotocol/server-brave-search
 ```
 
+## 7. Fetch MCP：网页内容获取利器
+
+**Fetch MCP** 是一个非常实用的工具，让 Claude Code 能够直接获取和解析网页内容。
+
+有了这个 MCP，你可以让 AI 帮你：
+- 📖 获取任意网页的完整内容
+- 🔍 提取网页中的特定信息
+- 📝 将网页内容转换为 Markdown 格式
+- 🌐 突破 AI 的知识库限制，获取最新信息
+
+这对于需要分析网页内容、抓取数据或者获取最新技术文档的开发场景特别有用。
+
+**安装命令：**
+```bash
+claude mcp add fetch -- uvx mcp-server-fetch
+```
+
 ## 总结
 
-这 6 个 MCP 工具涵盖了：
+这 7 个 MCP 工具涵盖了：
 
 1. **Context 7** - 最新文档查询
 2. **DeepWiki MCP** - 开源项目快速解读
@@ -124,5 +141,6 @@ claude mcp add search -s user -e BRAVE_API_KEY={your-key} -- npx -y @modelcontex
 4. **Exa MCP** - AI 优化的搜索引擎
 5. **Supabase MCP** - 数据库管理
 6. **Brave Search MCP** - 实时搜索能力
+7. **Fetch MCP** - 网页内容获取
 
 每个工具都能显著提升 Claude Code 的开发效率，建议大家根据自己的需求选择安装。
