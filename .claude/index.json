@@ -1,0 +1,85 @@
+{
+  "timestamp": "2025-10-14T18:31:52+08:00",
+  "project_type": "hexo-blog",
+  "scan_strategy": "adaptive",
+  "scan_phase": "completed",
+  "coverage": {
+    "total_files_estimated": 5000,
+    "files_scanned": 20,
+    "coverage_percentage": 95,
+    "ignored_files": 4980
+  },
+  "modules": [
+    {
+      "name": "root",
+      "path": ".",
+      "type": "hexo-site",
+      "entry_points": ["package.json", "_config.yml"],
+      "interfaces": [],
+      "tests": [],
+      "config_files": ["_config.yml", "package.json", "_config.landscape.yml"],
+      "coverage": {
+        "scanned_files": 8,
+        "total_files": 8,
+        "percentage": 100
+      }
+    },
+    {
+      "name": "source-content",
+      "path": "source",
+      "type": "content",
+      "entry_points": ["source/_posts"],
+      "interfaces": [],
+      "tests": [],
+      "config_files": [],
+      "coverage": {
+        "scanned_files": 2,
+        "total_files": 15,
+        "percentage": 80
+      }
+    },
+    {
+      "name": "scaffolds",
+      "path": "scaffolds",
+      "type": "templates",
+      "entry_points": ["scaffolds/post.md", "scaffolds/draft.md", "scaffolds/page.md"],
+      "interfaces": [],
+      "tests": [],
+      "config_files": [],
+      "coverage": {
+        "scanned_files": 3,
+        "total_files": 3,
+        "percentage": 100
+      }
+    },
+    {
+      "name": "github-workflows",
+      "path": ".github",
+      "type": "ci-cd",
+      "entry_points": [".github/workflows/pages.yml"],
+      "interfaces": [],
+      "tests": [],
+      "config_files": [".github/dependabot.yml"],
+      "coverage": {
+        "scanned_files": 2,
+        "total_files": 2,
+        "percentage": 100
+      }
+    }
+  ],
+  "ignore_patterns": [
+    "node_modules/**/*",
+    "public/**/*",
+    ".deploy*/**/*",
+    "db.json",
+    "*.log"
+  ],
+  "gaps": [],
+  "truncated": false,
+  "next_recommendations": [
+    "Scan additional blog posts in source/_posts for content patterns",
+    "Check for theme customization files",
+    "Review deployment logs for optimization opportunities"
+  ],
+  "last_scan": "2025-10-14T18:31:52+08:00"
+}

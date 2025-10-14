@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:mp.weixin.qq.com)",
+      "mcp__playwright__browser_navigate",
+      "Bash(hexo new:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(npm audit:*)",
+      "mcp__playwright__browser_take_screenshot",
+      "Bash(hexo:*)",
+      "Bash(hexo generate:*)",
+      "mcp__fetch__fetch",
+      "Bash(git config:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(tree:*)",
+      "Bash(find:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
